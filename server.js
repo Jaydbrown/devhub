@@ -39,13 +39,6 @@ app.use("/api/jobs", require("./routes/jobRoutes"));
 app.use("/api/negotiations", require("./routes/negotiationRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
 
-// Serve frontend files
-app.use(express.static(path.join(__dirname, "../public")));
-
-// Default route → frontend
-app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../public/index.html"));
-});
 
 // Start server
 const PORT = process.env.PORT || 5000;
