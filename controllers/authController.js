@@ -42,7 +42,7 @@ exports.register = async (req, res) => {
             user: newUser.rows[0]
         });
     } catch (err) {
-        console.error("❌ Registration error:", err);
+        console.error(" Registration error:", err);
         res.status(500).json({ message: "Server error", error: err.message });
     }
 };
@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
             }
         });
     } catch (err) {
-        console.error("❌ Login error:", err);
+        console.error(" Login error:", err);
         res.status(500).json({ message: "Server error", error: err.message });
     }
 };
