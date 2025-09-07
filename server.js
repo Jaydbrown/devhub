@@ -10,7 +10,16 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "https://devhu.netlify.app", //  Your Netlify frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
