@@ -5,8 +5,12 @@ dotenv.config();
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false // Required for Supabase on Render
-  }
+    rejectUnauthorized: false
+  },
+  keepAlive: true,      //  Keeps connections open
+  statement_timeout: 0, //  Avoid early timeouts
+  query_timeout: 0,
+  application_name: "devhub-backend"
 });
 
 pool.on("connect", () => {
@@ -15,7 +19,6 @@ pool.on("connect", () => {
 
 pool.on("error", (err) => {
   console.error(" Unexpected DB Error:", err);
-  process.exit(-1);
 });
 
 module.exports = { pool };
