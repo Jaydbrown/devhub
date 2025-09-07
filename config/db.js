@@ -5,12 +5,14 @@ dotenv.config();
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
+    require: true,
+    rejectUnauthorized: false // Supabase needs this for SSL
   },
-  keepAlive: true,      //  Keeps connections open
-  statement_timeout: 0, //  Avoid early timeouts
+  keepAlive: true,
+  statement_timeout: 0,
   query_timeout: 0,
-  application_name: "devhub-backend"
+  application_name: "devhub-backend",
+  family: 4 //  Forces IPv4, fixes ENETUNREACH
 });
 
 pool.on("connect", () => {
