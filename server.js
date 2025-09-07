@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const { pool } = require("./config/db");
 
 // Load environment variables
 dotenv.config();
@@ -21,6 +22,19 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.get("/api/health", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    res.json({ status: "ok", database: "connected", time: result.rows[0].now });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Database connection failed",
+      error: err.message,
+    });
+  }
+});
 
 // PostgreSQL DB Connection
 const { pool } = require("./config/db");
