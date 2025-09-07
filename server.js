@@ -36,14 +36,6 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// PostgreSQL DB Connection
-const { pool } = require("./config/db");
-
-// Test DB connection
-pool.connect()
-    .then(() => console.log("✅ Connected to PostgreSQL Database"))
-    .catch((err) => console.error(" DB Connection Error:", err.message));
-
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/developers", require("./routes/developerRoutes"));
