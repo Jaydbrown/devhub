@@ -16,8 +16,33 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// =====================
+// ✅ CORS Configuration
+// =====================
+const allowedOrigins = [
+  "https://devhyb-frontend.vercel.app", // your deployed frontend
+  "http://localhost:3000",              // local dev frontend
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.options("*", cors()); // preflight requests
+
+// =====================
 // Middleware
-app.use(cors());
+// =====================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -27,16 +52,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// =====================
 // Routes
+// =====================
 app.use("/api/auth", authRoutes);
 app.use("/api/developers", developerRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/stats", statsRoutes);
-app.use('/api/admin', adminRoutes);
+app.use("/api/admin", adminRoutes);
 
-// Health check
+// =====================
+// Health Check
+// =====================
 app.get("/health", (req, res) => {
   res.json({
     status: "OK",
@@ -45,16 +74,23 @@ app.get("/health", (req, res) => {
   });
 });
 
-// 404 handler
+// =====================
+// 404 Handler
+// =====================
 app.use("*", (req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-// Error handling middleware (must be last)
+// =====================
+// Error Handler
+// =====================
 app.use(errorHandler);
 
-// Start server
+// =====================
+// Start Server
+// =====================
 app.listen(PORT, () => {
   console.log(`🚀 DevHub API running on http://localhost:${PORT}`);
   console.log(`📚 Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(`🌐 Allowed Frontend: https://devhyb-frontend.vercel.app`);
 });
