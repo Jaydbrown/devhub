@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const { Pool } = pkg;
 
-// ✅ Secure connection for Neon (requires SSL)
+//  Secure connection for Neon (requires SSL)
 const pool = new Pool({
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "postgres",
@@ -20,10 +20,10 @@ const pool = new Pool({
 
 export const initializeDatabase = async () => {
   try {
-    console.log("✅ Connecting to PostgreSQL...");
+    console.log(" Connecting to PostgreSQL...");
     const client = await pool.connect();
 
-    // ✅ Create tables manually if they don’t exist
+    //  Create tables manually if they don’t exist
     const tableSQL = `
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -71,11 +71,11 @@ export const initializeDatabase = async () => {
     `;
 
     await client.query(tableSQL);
-    console.log("✅ All tables created or verified successfully.");
+    console.log(" All tables created or verified successfully.");
 
     client.release();
   } catch (err) {
-    console.error("❌ Database initialization error:", err.message);
+    console.error(" Database initialization error:", err.message);
   }
 };
 
@@ -85,9 +85,10 @@ export const query = async (text, params) => {
     const res = await client.query(text, params);
     return res;
   } catch (err) {
-    console.error("❌ Query error:", err.message);
+    console.error(" Query error:", err.message);
     throw err;
   } finally {
     client.release();
   }
 };
+
